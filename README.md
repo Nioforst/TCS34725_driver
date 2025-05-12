@@ -35,14 +35,19 @@ TCS34725 là một cảm biến màu (Color Sensor) do AMS sản xuất. Nó có
 
         cd /boot 
 
-hoặc 
+   hoặc 
 
         cd /boot/firmware/
-        
-2. Dùng câu lệnh để đổi file dtb sang dts 
+
+2. Dùng câu lệnh để đổi file dtb sang dts
+
         sudo dtc -I dtb -O dts -o bcm2712-rpi-5-b.dts bcm2712-rpi-5-b.dtb
-3. Truy cập vào file dts bằng cách nhập vào câu lệnh: "sudo nano dts bcm2712-rpi-5-b.dts"
-4. Kiếm cụm từ (sử dụng Ctrl + W) aliases
+
+3. Truy cập vào file dts bằng cách nhập vào câu lệnh: 
+
+sudo nano dts bcm2712-rpi-5-b.dts
+
+4. Kiếm cụm từ (sử dụng Ctrl + W) "aliases"
 5. Tìm đến dòng chứa cụm i2c1 (ví dụ: i2c1@74000), copy chúng và tìm kiếm
 6. Ở dòng cuối cùng, thêm vào những dòng sau:
 
@@ -51,8 +56,14 @@ hoặc
                 reg = <0x29>;
         };
 
-7. Chuyển ngược lại sang file dts: "sudo dtc -I dts -O dtb -o bcm2712-rpi-5-b.dtb bcm2712-rpi-5-b.dts"
-8. Lưu file lại và reboot (khởi động lại) bằng câu lệnh "sudo reboot"
+7. Chuyển ngược lại sang file dts: 
+
+sudo dtc -I dts -O dtb -o bcm2712-rpi-5-b.dtb bcm2712-rpi-5-b.dts
+
+8. Lưu file lại và reboot (khởi động lại) bằng câu lệnh 
+
+sudo reboot
+
 
 ### Cài đặt thư viện
 1. Đảm bảo kết nối phần cứng TCS34725 với Raspberry Pi 5 
@@ -66,13 +77,24 @@ hoặc
         clean: 
 	        make -C $(KDIR) M=$(shell pwd) clean
 
-3. Ngay trong thư mục chứa file driver và Makefile, mở terminal và dùng câu lệnh "make"
-4. Tiếp theo cài đặt driver bằng: "sudo insmod tcs34725_driver.ko"
+3. Ngay trong thư mục chứa file driver và Makefile, mở terminal và dùng câu lệnh 
+
+make
+
+4. Tiếp theo cài đặt driver bằng: 
+
+sudo insmod tcs34725_driver.ko
+
 5. Khi không muốn sử dụng driver nữa, sử dụng câu lệnh "sudo rmmod tcs34725_driver" để gỡ, và câu lệnh "make clean" để xoá các file thành phẩm
+
+sudo rmmod tcs34725_driver
+make clean
+
 
 ### Tạo file code để tương tác với cảm biến sử dụng driver
 Trong file code, lưu ý một số điểm sau đây:
 - Thêm vào các dòng sau đây để khai báo địa chỉ device, các hàm ioctl và hàm cấu trúc (dùng để lưu trữ giá trị r g b sau khi normalized nếu sử dụng hàm) bên dưới khai báo thư viện: 
+
     #define DEVICE_PATH "/dev/tcs34725"
 
     #define TCS34725_IOCTL_MAGIC 't'
@@ -86,12 +108,24 @@ Trong file code, lưu ý một số điểm sau đây:
         unsigned char g;
         unsigned char b;
     };
+
 - Thêm câu lệnh "int fd = open(DEVICE_PATH, RDONLY);" để mở driver đầu hàm main() và "close(fd)" để đóng driver ở cuối hàm main()
+
+int fd = open(DEVICE_PATH, RDONLY);
+close(fd)
+
 - Sử dụng câu lệnh "gcc tên_file_code -o tên_file_thành_phẩm" và dùng câu lệnh "sudo ./tên_file_thành_phẩm" để thực thi
+
+gcc tên_file_code -o tên_file_thành_phẩm
+sudo ./tên_file_thành_phẩm
+
 ---
 
 ## 3. Cách sử dụng các hàm IOCTL để tương tác trong hàm 
-Cấu trúc hàm iotcl: "tcs34725_ioctl(struct file *file, unsigned int cmd, unsigned long arg)"
+Cấu trúc hàm iotcl: 
+
+tcs34725_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+
 Trong đó: 
 - struct file *file: tên của biến đã dùng để mở driver (như đã hướng dẫn ở trên là biến fd, có thể đổi tên biến bằng tên khác)
 - unsigned int cmd: chọn hàm làm việc, bao gồm các hàm sau đây:
