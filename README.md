@@ -32,9 +32,13 @@ TCS34725 là một cảm biến màu (Color Sensor) do AMS sản xuất. Nó có
 
 ### Cập nhật Device Tree cho file bcm2712-rpi-5-b.dtb
 1. Dùng terminal và chuyển đến thư mục boot (hoặc boot/firmware tuỳ phiên bản): 
+
         cd /boot 
+
 hoặc 
+
         cd /boot/firmware/
+        
 2. Dùng câu lệnh để đổi file dtb sang dts 
         sudo dtc -I dtb -O dts -o bcm2712-rpi-5-b.dts bcm2712-rpi-5-b.dtb
 3. Truy cập vào file dts bằng cách nhập vào câu lệnh: "sudo nano dts bcm2712-rpi-5-b.dts"
