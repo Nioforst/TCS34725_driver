@@ -31,20 +31,30 @@ TCS34725 là một cảm biến màu (Color Sensor) do AMS sản xuất. Nó có
 | SCL      | Pin 5   |
 
 ### Cập nhật Device Tree cho file bcm2712-rpi-5-b.dtb
-1. Dùng terminal và chuyển đến thư mục boot (hoặc boot/firmware tuỳ phiên bản): cd /boot hoặc cd /boot/firmware/
-2. Dùng câu lệnh để đổi file dtb sang dts "sudo dtc -I dtb -O dts -o bcm2712-rpi-5-b.dts bcm2712-rpi-5-b.dtb"
-3. Truy cập vào file dts bằng cách nhập vào câu lệnh: "sudo nano dts bcm2712-rpi-5-b.dts"
-4. Kiếm cụm từ (sử dụng Ctrl + W) aliases
-5. Tìm đến dòng chứa cụm i2c1 (ví dụ: i2c1@74000), copy chúng và tìm kiếm
-6. Ở dòng cuối cùng, thêm vào những dòng sau:
+1. Dùng terminal và chuyển đến thư mục boot (hoặc boot/firmware tuỳ phiên bản):
+
+	cd /boot
+
+hoặc
+	cd /boot/firmware/
+ 
+3. Dùng câu lệnh để đổi file dtb sang dts
+sudo dtc -I dtb -O dts -o bcm2712-rpi-5-b.dts bcm2712-rpi-5-b.dtb
+4. Truy cập vào file dts bằng cách nhập vào câu lệnh:
+sudo nano dts bcm2712-rpi-5-b.dts
+5. Kiếm cụm từ (sử dụng Ctrl + W) "aliases"
+6. Tìm đến dòng chứa cụm i2c1 (ví dụ: i2c1@74000), copy chúng và tìm kiếm
+7. Ở dòng cuối cùng, thêm vào những dòng sau:
 
         tcs34725@29 {
                 compatible = "taos,tcs34725";
                 reg = <0x29>;
         };
 
-7. Chuyển ngược lại sang file dts: "sudo dtc -I dts -O dtb -o bcm2712-rpi-5-b.dtb bcm2712-rpi-5-b.dts"
-8. Lưu file lại và reboot (khởi động lại) bằng câu lệnh "sudo reboot"
+8. Chuyển ngược lại sang file dts:
+sudo dtc -I dts -O dtb -o bcm2712-rpi-5-b.dtb bcm2712-rpi-5-b.dts
+9. Lưu file lại và reboot (khởi động lại) bằng câu lệnh
+sudo reboot
 
 ### Cài đặt thư viện
 1. Đảm bảo kết nối phần cứng TCS34725 với Raspberry Pi 5 
